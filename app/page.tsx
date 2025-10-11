@@ -89,7 +89,7 @@ export default function HomePage() {
                   
                   <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
                     <Link 
-                      href={`/${post.category}/${post.slug}`}
+                      href={`/${encodeURIComponent(post.category)}/${post.slug}`}
                       className="hover:text-blue-600 transition-colors"
                     >
                       {post.title}
