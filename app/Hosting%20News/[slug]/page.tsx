@@ -51,7 +51,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const post = getPostBySlug(params.slug, 'Hosting News')
+  const post = getPostBySlug('Hosting News', params.slug)
   
   if (!post) {
     return {
@@ -61,59 +61,47 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   return {
-    title: post.frontmatter.title,
-    description: post.frontmatter.description,
+    title: post.title,
+    description: post.description,
     openGraph: {
-      title: post.frontmatter.title,
-      description: post.frontmatter.description,
+      title: post.title,
+      description: post.description,
       type: 'article',
-      publishedTime: post.frontmatter.date,
-      modifiedTime: post.frontmatter.lastUpdated || post.frontmatter.date,
-      authors: [post.frontmatter.author],
+      publishedTime: post.date,
+      authors: [post.author],
     },
   }
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const post = getPostBySlug(params.slug, 'Hosting News')
+  const post = getPostBySlug('Hosting News', params.slug)
 
   if (!post) {
     notFound()
   }
 
-  const { content, frontmatter } = post
-  const affiliateHost = getAffiliateHost(frontmatter.tags[0])
+  const { content, ...postData } = post
+  const affiliateHost = getAffiliateHost(post.tags?.[0] || '')
 
   return (
     <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="prose max-w-none">
         <PostHeader
-          title={frontmatter.title}
-          date={frontmatter.date}
-          author={frontmatter.author}
-          lastUpdated={frontmatter.lastUpdated}
-          category={frontmatter.category}
-          tags={frontmatter.tags}
+          title={post.title}
+          description={post.description || ''}
+          date={post.date}
+          author={post.author}
+          readingTime="5 min read"
+          rating={post.rating}
+          image={post.image}
         />
         
         <div className="mt-8">
           <MDXRemote source={content} components={components} />
         </div>
-
-        {affiliateHost && (
-          <div className="mt-12 border-t pt-8">
-            <AffiliateButton host={affiliateHost} />
-          </div>
-        )}
-
-        <div className="mt-12">
-          <Newsletter />
-        </div>
-
-        <div className="mt-12">
-          <Comments />
-        </div>
       </div>
+      <Comments postSlug={params.slug} />
+      <Newsletter />
     </article>
   )
 }

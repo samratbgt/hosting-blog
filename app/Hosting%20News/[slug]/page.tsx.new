@@ -44,14 +44,14 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = getAllSlugs('hosting-news')
+  const slugs = getAllSlugs('Hosting News')
   return slugs.map((slug) => ({
     slug,
   }))
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const post = getPostBySlug('hosting-news', params.slug)
+  const post = getPostBySlug('Hosting News', params.slug)
   
   if (!post) {
     return {
@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const post = getPostBySlug('hosting-news', params.slug)
+  const post = getPostBySlug('Hosting News', params.slug)
 
   if (!post) {
     notFound()
@@ -88,19 +88,17 @@ export default async function PostPage({ params }: PageProps) {
       <div className="prose max-w-none">
         <PostHeader
           title={post.title}
-          description={post.description || ''}
           date={post.date}
           author={post.author}
-          readingTime="5 min read"
-          rating={post.rating}
-          image={post.image}
+          category={post.category}
+          tags={post.tags || []}
         />
         
         <div className="mt-8">
           <MDXRemote source={content} components={components} />
         </div>
       </div>
-      <Comments postSlug={params.slug} />
+      <Comments />
       <Newsletter />
     </article>
   )
