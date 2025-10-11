@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   authors: [{ name: 'HostingHub Team' }],
   creator: 'HostingHub',
   publisher: 'HostingHub',
+  verification: {
+    google: 'l-g4wLIKrROeA-nAcZkmIL8xWnkfLB_3LQeGM6juwAo',
+  },
   robots: {
     index: true,
     follow: true,
