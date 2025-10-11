@@ -34,10 +34,10 @@ export default function ContactPage() {
                     For general inquiries, review suggestions, or partnership opportunities:
                   </p>
                   <a 
-                    href="mailto:hello@hostinghub.com"
+                    href="mailto:bhagatpaaji@gmail.com"
                     className="text-blue-600 hover:text-blue-800 font-medium"
                   >
-                    hello@hostinghub.com
+                    bhagatpaaji@gmail.com
                   </a>
                 </div>
               </div>
