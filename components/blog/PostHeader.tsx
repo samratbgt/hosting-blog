@@ -48,13 +48,13 @@ export default function PostHeader({
     <div className="border-b border-gray-200 pb-8 mb-8">
       {/* Feature Image */}
       {image && (
-        <div className="mb-8 rounded-xl overflow-hidden">
+        <div className="mb-8 rounded-xl overflow-hidden bg-gray-50">
           <Image
             src={image}
             alt={title}
             width={800}
             height={400}
-            className="w-full h-64 md:h-80 object-cover"
+            className="w-full h-auto object-contain"
             priority
           />
         </div>
