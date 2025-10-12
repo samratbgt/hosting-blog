@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
 
+export async function GET() {
+  const apiKey = process.env.MAILCHIMP_API_KEY
+  const listId = process.env.MAILCHIMP_LIST_ID
+  const configured = Boolean(apiKey && listId)
+  const dc = configured && apiKey?.includes('-') ? apiKey.split('-')[1] : null
+  return NextResponse.json({ configured, dc, runtime: 'nodejs' })
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { email } = await request.json()
