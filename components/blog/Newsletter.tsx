@@ -29,13 +29,31 @@ export default function Newsletter() {
     setStatus('loading')
     
     try {
-      // Replace these with your EmailJS credentials
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID'
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID'
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
+      // Get EmailJS credentials from environment variables
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
 
+      // Check if credentials are configured
+      if (!serviceId || !templateId || !publicKey) {
+        console.error('EmailJS not configured:', { serviceId: !!serviceId, templateId: !!templateId, publicKey: !!publicKey })
+        setStatus('error')
+        setMessage('Newsletter service is not configured. Please contact the administrator.')
+        return
+      }
+
+      // Check for placeholder values
+      if (serviceId === 'YOUR_SERVICE_ID' || templateId === 'YOUR_TEMPLATE_ID' || publicKey === 'YOUR_PUBLIC_KEY') {
+        console.error('EmailJS credentials are placeholder values')
+        setStatus('error')
+        setMessage('Newsletter service is not properly configured.')
+        return
+      }
+
+      console.log('Sending email with EmailJS...')
+      
       // Send email using EmailJS
-      await emailjs.send(
+      const result = await emailjs.send(
         serviceId,
         templateId,
         {
@@ -46,13 +64,25 @@ export default function Newsletter() {
         publicKey
       )
 
+      console.log('EmailJS response:', result)
+
       setStatus('success')
       setMessage('Thank you for subscribing! Check your email for confirmation.')
       setEmail('')
-    } catch (error) {
+    } catch (error: any) {
       console.error('EmailJS error:', error)
+      
+      // Provide more specific error messages
+      let errorMessage = 'Something went wrong. Please try again.'
+      
+      if (error?.text) {
+        errorMessage = `Error: ${error.text}`
+      } else if (error?.message) {
+        errorMessage = error.message
+      }
+      
       setStatus('error')
-      setMessage('Something went wrong. Please try again.')
+      setMessage(errorMessage)
     }
   }
 
