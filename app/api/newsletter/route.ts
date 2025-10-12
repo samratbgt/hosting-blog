@@ -7,7 +7,12 @@ export async function GET() {
   const listId = process.env.MAILCHIMP_LIST_ID
   const configured = Boolean(apiKey && listId)
   const dc = configured && apiKey?.includes('-') ? apiKey.split('-')[1] : null
-  return NextResponse.json({ configured, dc, runtime: 'nodejs' })
+  const keys = {
+    MAILCHIMP_API_KEY: Boolean(apiKey),
+    MAILCHIMP_LIST_ID: Boolean(listId),
+    NEXT_PUBLIC_MAILCHIMP_API_KEY: Boolean(process.env.NEXT_PUBLIC_MAILCHIMP_API_KEY),
+  }
+  return NextResponse.json({ configured, dc, runtime: 'nodejs', keys })
 }
 
 export async function POST(request: NextRequest) {
