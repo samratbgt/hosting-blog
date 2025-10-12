@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Mail, CheckCircle, AlertCircle } from 'lucide-react'
+import emailjs from '@emailjs/browser'
 
 export default function Newsletter() {
   const [email, setEmail] = useState('')
@@ -17,30 +18,41 @@ export default function Newsletter() {
       return
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setStatus('error')
+      setMessage('Please enter a valid email address')
+      return
+    }
+
     setStatus('loading')
     
     try {
-      const response = await fetch('/api/newsletter', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Replace these with your EmailJS credentials
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID'
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID'
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
+
+      // Send email using EmailJS
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          user_email: email,
+          to_email: email, // Send to subscriber
+          from_name: 'HostingHub',
         },
-        body: JSON.stringify({ email }),
-      })
+        publicKey
+      )
 
-      const data = await response.json()
-
-      if (response.ok) {
-        setStatus('success')
-        setMessage('Thank you for subscribing! Check your email for confirmation.')
-        setEmail('')
-      } else {
-        setStatus('error')
-        setMessage(data.message || 'Something went wrong. Please try again.')
-      }
+      setStatus('success')
+      setMessage('Thank you for subscribing! Check your email for confirmation.')
+      setEmail('')
     } catch (error) {
+      console.error('EmailJS error:', error)
       setStatus('error')
-      setMessage('Network error. Please try again.')
+      setMessage('Something went wrong. Please try again.')
     }
   }
 
