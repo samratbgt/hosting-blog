@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import GAEvents from '@/components/analytics/GAEvents'
+import { Suspense } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -70,7 +71,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <GoogleAnalytics />
-        <GAEvents />
+        <Suspense fallback={null}>
+          <GAEvents />
+        </Suspense>
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-grow">
