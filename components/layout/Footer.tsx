@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
-const footerNavigation = {
+type NavItem = { name: string; href: string }
+const footerNavigation: Record<'about' | 'quickLinks' | 'legal' | 'contact', NavItem[]> = {
   about: [
     { name: 'Our Story', href: '/about' },
     { name: 'Why Trust Us', href: '/about#trust' },
@@ -17,8 +18,6 @@ const footerNavigation = {
     { name: 'Affiliate Disclosure', href: '/affiliate-disclosure' },
   ],
   contact: [
-    { name: 'hello@hostinghub.com', href: 'mailto:hello@hostinghub.com' },
-    { name: 'Support Center', href: '/contact' },
   ],
 }
 
@@ -84,18 +83,20 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
-              <div className="mt-10 md:mt-0">
-                <h3 className="text-sm font-semibold leading-6 text-gray-900">Contact</h3>
-                <ul role="list" className="mt-6 space-y-4">
-                  {footerNavigation.contact.map((item) => (
-                    <li key={item.name}>
-                      <Link href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {footerNavigation.contact.length > 0 && (
+                <div className="mt-10 md:mt-0">
+                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Contact</h3>
+                  <ul role="list" className="mt-6 space-y-4">
+                    {footerNavigation.contact.map((item) => (
+                      <li key={item.name}>
+                        <Link href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
+                          {item.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>
