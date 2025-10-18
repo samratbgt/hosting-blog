@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 type NavItem = { name: string; href: string }
-const footerNavigation: Record<'about' | 'quickLinks' | 'legal' | 'contact', NavItem[]> = {
+const footerNavigation: Record<'about' | 'quickLinks' | 'legal', NavItem[]> = {
   about: [
     { name: 'Our Story', href: '/about' },
     { name: 'Why Trust Us', href: '/about#trust' },
@@ -16,8 +16,6 @@ const footerNavigation: Record<'about' | 'quickLinks' | 'legal' | 'contact', Nav
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '/terms' },
     { name: 'Affiliate Disclosure', href: '/affiliate-disclosure' },
-  ],
-  contact: [
   ],
 }
 
@@ -83,20 +81,6 @@ export default function Footer() {
                   ))}
                 </ul>
               </div>
-              {footerNavigation.contact.length > 0 && (
-                <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Contact</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.contact.map((item) => (
-                      <li key={item.name}>
-                        <Link href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
-                          {item.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
           </div>
         </div>
